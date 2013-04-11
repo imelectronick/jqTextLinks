@@ -3,7 +3,7 @@
     var settings = {
         // expression that finds words that looks like URIs
         // TODO: modify algorithm to replace only plaintext links
-        'expression': /(\b(https?|ftp|file):\/\/[-A-ZА-Я0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig
+        'expression': /(\b(https?|ftp|file):\/\/[-A-ZА-ЯЙ0-9+&@#\/%?=~_|!:,.;]*[-A-ZА-ЯЙ0-9+&@#\/%=~_|])/ig
     };
 
 
@@ -12,14 +12,13 @@
 
     var pluginsOrder = [];
 
-    var methods = {
-        'init': function (options) {
-            return this.each(function (){
-                $this = $(this);
-                var content = $this.html();
-                // replace links
+    var skipNodes = ['A', 'SCRIPT'];
+    var recursiveReplace = function (node) {
+        node.contents().each(function (index, childNode) {
+            if (childNode.nodeType == 3) {
+                var content = childNode.nodeValue;
                 content = content.replace(settings['expression'], function (match, contents, offset, s) {
-                    // TODO: before plugin call check link Content-Type (server-side?) and put it into plugin match method
+                    // TODO: check link Content-Type (server-side?) and put it into plugin match method
                     // call plugins for each replace match
                     var result = contents;
                     for (i in pluginsOrder) {
@@ -34,7 +33,21 @@
                     }
                     return result;
                 });
-                $this.html(content);
+                $(childNode).replaceWith($('<span>'+content+'</span>').html());
+            }
+            else if (childNode.nodeType == 1 && $.inArray(childNode.nodeName, skipNodes) === -1) {
+                recursiveReplace($(childNode));
+            }
+        });
+    }
+
+    var methods = {
+        'init': function (options) {
+            return this.each(function (){
+                $this = $(this);
+                //var content = $this.html();
+                // replace links
+                recursiveReplace($this);
             });
         },
         // global jqTextLink settings methods
@@ -55,7 +68,6 @@
                 var index = pluginsOrder.length-1;
                 pluginsOrder.splice(index, 0, name);
             }
-            alert();
             return $.fn.jqTextLinks;
         },
         'removePlugin': function (name) {

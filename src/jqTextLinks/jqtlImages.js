@@ -5,7 +5,7 @@
         var match = function (match, contents, offset, s) {
             var match_img = match.match(/\.(jpg|png|gif|jpeg)\/*$/i);
             if (match_img != null && match_img.length) {
-                return '<img class="'+settings['image-class']+'" src="'+match+'"><a class="'+settings['link-class']+'" href="'+match+'" target="'+settings['link-target']+'">'+shortText(match)+'</a><br>';
+                return '<img class="'+settings['image-class']+'" src="'+match+'"><a class="'+settings['link-class']+'" href="'+match+'" target="'+settings['link-target']+'">'+shortText(match)+'</a>';
             }
         }
         return {'match': match};
