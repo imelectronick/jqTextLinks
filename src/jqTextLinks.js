@@ -37,7 +37,6 @@
                 });
                 $this.html(content);
             });
-            return this;
         },
         // global jqTextLink settings methods
         'settings': function (options) {
