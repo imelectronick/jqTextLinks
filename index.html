@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>jqTextLinks example</title>
+</head>
+<body>
+    <div id="koko">
+        <p>http://www.w3cscools.com fdsfs <a href="http://www.w3cscools.com">http://www.w3cscools.com</a></p>
+        <p>http://f.cl.ly/items/2h1X2G3G2F0Y3M2X3B0T/FHOqQjHYGZ4.jpeg</p>
+        <p>a couple of text before http://www.youtube.com/watch?v=7v9ItSEk24Y and a little after</p>
+        <p>a couple of text before http://cs419820.vk.me/v419820337/36f0/wcycXsng1-E.jpg and a little after</p>
+        <script type="text/javascript">
+            // http://www.nival.com
+        </script>
+    </div>
+    <a id="replace" href="#">replace links</a>
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="src/jqTextLinks.js"></script>
+    <script type="text/javascript" src="src/jqTextLinks/jqtlImages.js"></script>
+    <script type="text/javascript" src="src/jqTextLinks/jqtlYoutube.js"></script>
+    <script type="text/javascript">
+    	$('#replace').on('click', function (e) {
+	        $('#koko').jqTextLinks();
+	        e.preventDefault();
+	    });
+    </script>
+</body>
+</html>
