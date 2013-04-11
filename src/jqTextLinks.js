@@ -10,7 +10,6 @@
     // Plugin objects
     var plugins = {};
 
-    // TODO: more flexible priority list
     var pluginsOrder = [];
 
     var methods = {
@@ -44,7 +43,7 @@
             return this;
 
         },
-        // TODO: realize priority parameter
+        // TODO: more flexible priority list
         'addPlugin': function (name, plugin, priority) {
             plugins[name] = plugin;
             if (priority) {
@@ -52,8 +51,11 @@
                 pluginsOrder.splice(index, 0, name);
             }
             else {
-                pluginsOrder.unshift(name);
+                // by default add plugin to end of priority list but before link
+                var index = pluginsOrder.length-1;
+                pluginsOrder.splice(index, 0, name);
             }
+            alert();
             return $.fn.jqTextLinks;
         },
         'removePlugin': function (name) {
@@ -79,37 +81,7 @@
 
 
 (function ($) {
-    // register base plugins
-
-    // image links
-    var jqtlImg = (function () {
-        var settings = {'image-class': 'embed-image', 'link-class': 'embed-link', 'link-target': '_blank'};
-        var match = function (match, contents, offset, s) {
-            var match_img = match.match(/\.(jpg|png|gif|jpeg)\/*$/i);
-            if (match_img != null && match_img.length) {
-                return '<img class="'+settings['image-class']+'" src="'+match+'"><a class="'+settings['link-class']+'" href="'+match+'" target="'+settings['link-target']+'">'+shortText(match)+'</a><br>';
-            }
-        }
-        return {'match': match};
-    })();
-    $.fn.jqTextLinks('addPlugin', 'img', jqtlImg);
-
-    // youtube links
-    var jqtlYoutube = (function () {
-        var settings = {'iframe-class': 'embed-youtube'};
-        var match = function (match, contents, offset, s) {
-            var match_vid = match.match(/(?:youtube(?:-nocookie)?\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/i);
-            if (match_vid != null && match_vid.length) {
-                return '<iframe class="'+settings['iframe-class']+'" type="text/html" width="'+settings['embed-max-width']+'" height="'+settings['embed-max-height']+'" \
-                    src="http://www.youtube.com/embed/'+match_vid[1]+'?autoplay=0" \
-                    frameborder="0"/>';
-            }
-        }
-        return {'match': match};
-    })();
-    $.fn.jqTextLinks('addPlugin', 'youtube', jqtlYoutube);
-
-    // other links
+    // register base plugin
     var jqtlLink = (function () {
         var settings = {'link-class': 'embed-link', 'link-target': '_blank'};
         var match = function (match, contents, offset, s) {
